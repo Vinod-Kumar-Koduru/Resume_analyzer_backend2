@@ -6,4 +6,3 @@ pdfplumber
 google-generativeai
 langchain
 langchain-google-genai
-gunicorn

@@ -1,4 +1,6 @@
 # routes.py
+import asyncio
+import json
 from flask import Blueprint, request, jsonify
 from werkzeug.utils import secure_filename
 from services.analysis_service import analyze_resume, extract_text_from_pdf
@@ -7,7 +9,7 @@ from db.database import get_db_connection
 resume_bp = Blueprint('resume', __name__)
 
 @resume_bp.route('/upload', methods=['POST'])
-def upload_resume():
+async def upload_resume():
     if 'resume' not in request.files:
         return jsonify({"error": "No file part"}), 400
     
@@ -18,8 +20,8 @@ def upload_resume():
     try:
         # File buffer is used for direct processing
         file_buffer = file.read()
-        resume_text = extract_text_from_pdf(file_buffer)
-        analysis = analyze_resume(resume_text)
+        resume_text = await extract_text_from_pdf(file_buffer)
+        analysis = await analyze_resume(resume_text)
 
         # Store in database
         conn = get_db_connection()

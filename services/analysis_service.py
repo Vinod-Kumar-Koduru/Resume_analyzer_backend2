@@ -1,6 +1,7 @@
 # services/analysis_service.py
 import os
 import json
+import io
 import pdfplumber
 from google.generativeai import GenerativeModel
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -37,7 +38,7 @@ class ResumeAnalysis(BaseModel):
     improvement_areas: str
     upskill_suggestions: List[str] = []
 
-def extract_text_from_pdf(file_buffer):
+async def extract_text_from_pdf(file_buffer):
     text = ""
     try:
         with pdfplumber.open(file_buffer) as pdf:
